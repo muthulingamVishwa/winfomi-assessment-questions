@@ -3,7 +3,7 @@
     write a trigger on the Opportunity object in Salesforce. The trigger should update a custom field called “Total Opportunity Amount” on each Opportunity record. This field should reflect the sum of the Amount fields from all Opportunity records related to the same Account.
     Additionally, you are provided with a class OpportunityT that has a static method ClosedDate. This method updates the CloseDate field of Opportunity records based on the maximum CloseDate of all Opportunity records related to the same Account.
 
-    # Trigger Class Opportunity 
+# Trigger Class Opportunity 
     
 
         trigger OpportunityTrigger on Opportunity (before insert, before update,after insert ,after update) {
