@@ -162,9 +162,9 @@ public class accountUpdate {
     }
 }
 
-# it working but not good partice 
+# it work but not good practice 
 
- good partice:
+ ## good practice:
 
 trigger updateopp on Account (after update) {
     
