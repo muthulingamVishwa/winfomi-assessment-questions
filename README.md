@@ -104,3 +104,97 @@ public class OpportunityT {
         
         
     }
+
+
+  # teachical Interview   
+
+     Whenever an Account record is updated, if the AnnualRevenue field of the account is greater than $1,000,000,
+     you need to update the Priority field on all related Opportunities to "High". If the AnnualRevenue is $1,000,000 or less, 
+     update the Priority field on all related Opportunities to "Normal".
+
+
+I answer
+
+
+trigger updateopp on Account (after update) {
+    
+     accountUpdate.AnnualR(trigger.new);   
+
+}
+
+
+public class accountUpdate {
+
+    
+    public static void AnnualR(list<Account> newlist){
+        set<id> accountId =new set<id>();
+        map<id,string> mapp=new map<id,string>();
+        for(Account acc:newlist){
+            accountId.add(acc.Id);
+            if(acc.AnnualRevenue > 1000000){
+                
+                mapp.put(acc.Id,'high');
+                
+            }else if(acc.AnnualRevenue <= 1000000){
+                 mapp.put(acc.Id,'Normal');
+            }
+            
+            
+            
+            
+        }
+        
+        list<opportunity> opport=new list<opportunity>();
+       for(opportunity opp:[Select id,AccountId,Priority__c From opportunity where AccountId in : accountId ]){
+               
+          opportunity op= new opportunity(); 
+           
+           op.Id=opp.Id;
+           op.Priority__c=mapp.get(opp.AccountId);
+           opport.add(op);  
+        }
+        
+        if(!opport.isEmpty()){
+            
+            update opport;
+        }
+        
+    }
+}
+
+# it working but not good partice 
+
+ good partice:
+
+trigger updateopp on Account (after update) {
+    
+     accountUpdate.AnnualR(trigger.NewMap);   
+
+}
+
+public class accountUpdate {
+
+    
+    public static void AnnualR(Map<id,Account> newlist){
+        
+        list<Opportunity>  opport=new list<opportunity>();
+        
+        for(opportunity opp:[Select id,Account.AnnualRevenue From Opportunity where AccountId in : newlist.keySet()]){
+            
+            if(opp.Account.AnnualRevenue != null && opp.Account.AnnualRevenue > 1000000){
+                opp.Priority__c='High';
+            }else{
+                opp.Priority__c='Normal';
+            }
+            opport.add(opp);
+        }
+        
+        if(!opport.isEmpty()){
+            update opport;
+        }
+     
+    }
+    
+}
+
+  
