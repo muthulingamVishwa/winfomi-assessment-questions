@@ -124,10 +124,7 @@ trigger updateopp on Account (after update) {
 
 }
 
-
 public class accountUpdate {
-
-    
     public static void AnnualR(list<Account> newlist){
         set<id> accountId =new set<id>();
         map<id,string> mapp=new map<id,string>();
@@ -139,11 +136,7 @@ public class accountUpdate {
                 
             }else if(acc.AnnualRevenue <= 1000000){
                  mapp.put(acc.Id,'Normal');
-            }
-            
-            
-            
-            
+            }    
         }
         
         list<opportunity> opport=new list<opportunity>();
@@ -159,8 +152,7 @@ public class accountUpdate {
         if(!opport.isEmpty()){
             
             update opport;
-        }
-        
+        } 
     }
 }
 
