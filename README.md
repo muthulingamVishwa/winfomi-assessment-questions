@@ -119,11 +119,8 @@ I answer
 
 
 trigger updateopp on Account (after update) {
-    
      accountUpdate.AnnualR(trigger.new);   
-
 }
-
 public class accountUpdate {
     public static void AnnualR(list<Account> newlist){
         set<id> accountId =new set<id>();
@@ -131,19 +128,14 @@ public class accountUpdate {
         for(Account acc:newlist){
             accountId.add(acc.Id);
             if(acc.AnnualRevenue > 1000000){
-                
                 mapp.put(acc.Id,'high');
-                
             }else if(acc.AnnualRevenue <= 1000000){
                  mapp.put(acc.Id,'Normal');
             }    
         }
-        
         list<opportunity> opport=new list<opportunity>();
-       for(opportunity opp:[Select id,AccountId,Priority__c From opportunity where AccountId in : accountId ]){
-               
-          opportunity op= new opportunity(); 
-           
+       for(opportunity opp:[Select id,AccountId,Priority__c From opportunity where AccountId in : accountId ]){  
+          opportunity op= new opportunity();    
            op.Id=opp.Id;
            op.Priority__c=mapp.get(opp.AccountId);
            opport.add(op);  
@@ -157,18 +149,13 @@ public class accountUpdate {
 }
 
 # it work but not good practice 
-
  ## good practice:
-
-trigger updateopp on Account (after update) {
-    
+ 
+ 
+ trigger updateopp on Account (after update) {
      accountUpdate.AnnualR(trigger.NewMap);   
-
 }
-
-public class accountUpdate {
-
-    
+public class accountUpdate { 
     public static void AnnualR(Map<id,Account> newlist){
         
         list<Opportunity>  opport=new list<opportunity>();
